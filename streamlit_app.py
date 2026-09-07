@@ -44,7 +44,7 @@ if ingredients_list:
         )
 
         sf_df = pd.DataFrame(
-            smoothiefroot_response.json()
+            [smoothiefroot_response.json()]
         )
 
         st.dataframe(
