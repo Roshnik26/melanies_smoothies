@@ -37,20 +37,20 @@ if ingredients_list:
     ingredients_string = ""
 
     for fruit_chosen in ingredients_list:
-    ingredients_string += fruit_chosen + " "
+        ingredients_string += fruit_chosen + " "
 
-    smoothiefroot_response = requests.get(
-        f"https://my.smoothiefroot.com/api/fruit/{fruit_chosen}"
-    )
+        smoothiefroot_response = requests.get(
+            f"https://my.smoothiefroot.com/api/fruit/{fruit_chosen}"
+        )
 
-    sf_df = pd.DataFrame(
-        smoothiefroot_response.json()
-    )
+        sf_df = pd.DataFrame(
+            smoothiefroot_response.json()
+        )
 
-    st.dataframe(
-        data=sf_df,
-        use_container_width=True
-    )
+        st.dataframe(
+            data=sf_df,
+            use_container_width=True
+        )
 
     st.write("Your smoothie will be:")
     st.write(ingredients_string)
