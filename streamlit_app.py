@@ -2,6 +2,7 @@
 import streamlit as st
 from snowflake.snowpark.functions import col
 import requests
+import pandas as pd
 
 # Write directly to the app
 st.title(":cup_with_straw: Customize Your Smoothie! :cup_with_straw:")
@@ -45,11 +46,11 @@ if ingredients_list:
     ).collect()
 
 
-# Step 2 - API code
-import requests
-
+# SmoothieFroot API
 smoothiefroot_response = requests.get(
     "https://my.smoothiefroot.com/api/fruit/watermelon"
 )
 
-st.json(smoothiefroot_response.json())
+sf_df = pd.DataFrame(smoothiefroot_response.json())
+
+st.dataframe(sf_df)
