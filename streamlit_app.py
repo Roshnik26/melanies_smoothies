@@ -39,13 +39,16 @@ if ingredients_list:
     for fruit_chosen in ingredients_list:
         ingredients_string += fruit_chosen + " "
 
-        st.write("Fruit sent to API:", fruit_chosen)
+        # Convert the fruit name to lowercase for the API
+        api_fruit_name = fruit_chosen.lower()
+
+        # SmoothieFroot API uses "apple" instead of "apples"
+        if api_fruit_name == "apples":
+            api_fruit_name = "apple"
 
         smoothiefroot_response = requests.get(
-            "https://my.smoothiefroot.com/api/fruit/watermelon"
+            f"https://my.smoothiefroot.com/api/fruit/{api_fruit_name}"
         )
-
-        st.write("API response:", smoothiefroot_response.text)
 
         sf_df = pd.DataFrame(
             [smoothiefroot_response.json()]
