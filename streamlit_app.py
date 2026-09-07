@@ -42,7 +42,7 @@ if ingredients_list:
         st.write("Fruit sent to API:", fruit_chosen)
 
         smoothiefroot_response = requests.get(
-            f"https://my.smoothiefroot.com/api/fruit/{fruit_chosen.lower()}"
+            "https://my.smoothiefroot.com/api/fruit/watermelon"
         )
 
         st.write("API response:", smoothiefroot_response.text)
