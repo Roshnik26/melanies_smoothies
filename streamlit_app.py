@@ -39,13 +39,12 @@ if ingredients_list:
     for fruit_chosen in ingredients_list:
         ingredients_string += fruit_chosen + " "
 
-        # Display nutrition information for each selected fruit
-        st.subheader(f"{fruit_chosen} Nutrition Information")
+        st.subheader(
+            f"{fruit_chosen} Nutrition Information"
+        )
 
-        # Convert the selected fruit name for the API
         api_fruit_name = fruit_chosen.lower()
 
-        # API uses "apple" instead of "apples"
         if api_fruit_name == "apples":
             api_fruit_name = "apple"
 
@@ -53,15 +52,20 @@ if ingredients_list:
             f"https://my.smoothiefroot.com/api/fruit/{api_fruit_name}"
         )
 
-        # Convert API response into a dataframe
-        sf_df = pd.DataFrame(
-            [smoothiefroot_response.json()]
-        )
+        if smoothiefroot_response.status_code == 200:
+            sf_df = pd.DataFrame(
+                [smoothiefroot_response.json()]
+            )
 
-        st.dataframe(
-            data=sf_df,
-            use_container_width=True
-        )
+            st.dataframe(
+                data=sf_df,
+                use_container_width=True
+            )
+        else:
+            st.warning(
+                f"Nutrition information for {fruit_chosen} "
+                "is not available."
+            )
 
     st.write("Your smoothie will be:")
     st.write(ingredients_string)
