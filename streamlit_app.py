@@ -13,44 +13,60 @@ st.write(
     """
 )
 
-name_on_order = st.text_input('Name on Smoothie:')
-st.write('The name on your Smoothie will be:', name_on_order)
+name_on_order = st.text_input("Name on Smoothie:")
+
+st.write(
+    "The name on your Smoothie will be:",
+    name_on_order
+)
 
 cnx = st.connection("snowflake")
 session = cnx.session()
 
-my_dataframe = session.table("smoothies.public.fruit_options").select(col("FRUIT_NAME"))
+my_dataframe = session.table(
+    "smoothies.public.fruit_options"
+).select(col("FRUIT_NAME"))
 
 ingredients_list = st.multiselect(
-    'Choose up to 5 ingredients:',
+    "Choose up to 5 ingredients:",
     my_dataframe,
     max_selections=5
 )
 
 if ingredients_list:
-    ingredients_string = ''
+    ingredients_string = ""
 
     for fruit_chosen in ingredients_list:
-        ingredients_string += fruit_chosen + ' '
+        ingredients_string += fruit_chosen + " "
 
+        smoothiefroot_response = requests.get(
+            "https://my.smoothiefroot.com/api/fruit/watermelon"
+        )
+
+        sf_df = pd.DataFrame(
+            smoothiefroot_response.json()
+        )
+
+        st.dataframe(
+            data=sf_df,
+            use_container_width=True
+        )
+
+    st.write("Your smoothie will be:")
     st.write(ingredients_string)
 
-    my_insert_stmt = """INSERT INTO smoothies.public.orders
-        (ingredients, name_on_order)
-        VALUES (?, ?)
-    """
+    time_to_insert = st.button("Submit Order")
 
-    session.sql(
-        my_insert_stmt,
-        params=[ingredients_string, name_on_order]
-    ).collect()
+    if time_to_insert:
+        my_insert_stmt = """
+            INSERT INTO smoothies.public.orders
+                (ingredients, name_on_order)
+            VALUES (?, ?)
+        """
 
+        session.sql(
+            my_insert_stmt,
+            params=[ingredients_string, name_on_order]
+        ).collect()
 
-# SmoothieFroot API
-smoothiefroot_response = requests.get(
-    "https://my.smoothiefroot.com/api/fruit/watermelon"
-)
-
-sf_df = pd.DataFrame(smoothiefroot_response.json())
-
-st.dataframe(sf_df)
+        st.success("Your smoothie has been ordered!")
