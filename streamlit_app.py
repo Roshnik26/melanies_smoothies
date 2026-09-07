@@ -58,13 +58,11 @@ if ingredients_list:
         )
 
         st.subheader(
-            f"{fruit_chosen} Nutrition Information"
+            fruit_chosen + " Nutrition Information"
         )
 
-        api_fruit_name = search_on.lower()
-
         smoothiefroot_response = requests.get(
-            f"https://my.smoothiefroot.com/api/fruit/{api_fruit_name}"
+            f"https://my.smoothiefroot.com/api/fruit/{search_on.lower()}"
         )
 
         if smoothiefroot_response.status_code == 200:
